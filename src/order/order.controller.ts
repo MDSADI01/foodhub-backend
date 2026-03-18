@@ -4,8 +4,7 @@ import { orderService } from "./order.service";
 
 const createOrder = async (req: Request, res: Response) => {
   try {
-    const customerId = req.user?.id as string; // from auth middleware
-
+    const customerId = req.user?.id as string; 
     const result = await orderService.createOrder(
       customerId,
       req.body

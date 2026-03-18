@@ -1,33 +1,33 @@
-import { prisma } from "../../lib/prisma"
+import { prisma } from "../../lib/prisma";
 
-const getAllMeals = async ()=>{
+const getAllMeals = async () => {
+  const result = await prisma.meal.findMany();
 
- const result = await prisma.meal.findMany();
+  return result;
+};
 
- return result;
+const getMealsById = async (mealId: string) => {
+  if (!mealId) {
+    throw new Error("Meal ID is required");
+  }
 
-}
+  const result = await prisma.meal.findFirst({
+    where: {
+      id: mealId,
+    },
+    include: {
+      provider: {
+        select: {
+          restaurantName: true,
+        },
+      },
+    },
+  });
 
-
-const getMealsById = async (mealId: string)=>{
-
-    if(!mealId){
-        throw new Error("Meal ID is required")
-    }
-
-    const result = await prisma.meal.findFirst({
-        where:{
-            id:mealId
-        }
-    });
-   
-    return result;
-   
-   }
-
-
+  return result;
+};
 
 export const mealService = {
-      getAllMeals,
-      getMealsById
-}
+  getAllMeals,
+  getMealsById,
+};

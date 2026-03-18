@@ -8,15 +8,19 @@ datasource db {
 }
 
 model User {
-  id               String            @id @default(uuid())
-  name             String
-  email            String            @unique
-  password         String?
-  role             Role              @default(CUSTOMER)
-  isActive         Boolean           @default(true)
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  emailVerified    Boolean           @default(true)
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password      String?
+  role          Role     @default(CUSTOMER)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  emailVerified Boolean  @default(true)
+  phone         String?  @unique
+  address       String?
+  image         String?
+
   orders           Order[]
   reviews          Review[]
   accounts         Account[]
@@ -60,8 +64,8 @@ model Meal {
   isAvailable Boolean         @default(true)
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
-  category    Category        @relation(fields: [categoryId], references: [id] )
-  provider    ProviderProfile @relation(fields: [providerId], references: [id] , onDelete:Cascade)
+  category    Category        @relation(fields: [categoryId], references: [id])
+  provider    ProviderProfile @relation(fields: [providerId], references: [id], onDelete: Cascade)
   orderItems  OrderItem[]
   reviews     Review[]
 
@@ -104,7 +108,7 @@ model Review {
   rating     Int
   comment    String?
   createdAt  DateTime @default(now())
-  customer   User     @relation(fields: [customerId], references: [id] , onDelete: Cascade)
+  customer   User     @relation(fields: [customerId], references: [id], onDelete: Cascade)
   meal       Meal     @relation(fields: [mealId], references: [id])
 
   @@index([customerId])
