@@ -12,6 +12,8 @@ import { getProviderRoutes } from "../getProviders/getProv.route";
 import { categoryRoutes } from "../categories/categories.route";
 import { adminRoutes } from "../admin/admin.route";
 import { reviewRouter } from "../review/review.route";
+import { profileRoute } from "../manageProfile/profile.route";
+
 // import { categoryRoutes } from '../category/category.route';
 
 const app: Application = express();
@@ -37,5 +39,6 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/meals", mealRoutes);
 app.use("/api/providers", getProviderRoutes);
 app.use("/api/reviews", reviewRouter);
+app.use("/api/profile",profileRoute);
 
 export default app;
