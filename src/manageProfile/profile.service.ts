@@ -12,9 +12,6 @@ import { prisma } from "../../lib/prisma"
         image: payload.image,
       },
       select: {
-        id: true,
-        name: true,
-        email: true,
         phone: true,
         address: true,
         image: true,
