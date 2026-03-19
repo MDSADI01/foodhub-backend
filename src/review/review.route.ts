@@ -9,7 +9,7 @@ const router = Router();
 router.post("/",authorization(Role.CUSTOMER),reviewController.createReview)
 router.get("/",reviewController.getAllReviews)
 router.get("/own",authorization(Role.CUSTOMER),reviewController.getMyReviews)
-router.put("/:id",authorization(Role.CUSTOMER),reviewController.updateReview)
+router.get("/meals/:id",authorization(),reviewController.getReviewsByMealId)
 router.delete("/:id",authorization(Role.CUSTOMER,Role.ADMIN),reviewController.deleteReview)
 
 

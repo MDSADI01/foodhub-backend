@@ -64,7 +64,7 @@ const createOrder = async (customerId: string, payload: any) => {
     }
   });
 
-  console.log(order);
+ return order
 };
 
 const getCustomerOrders = async (customerId: string) => {

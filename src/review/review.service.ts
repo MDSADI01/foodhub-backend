@@ -77,42 +77,6 @@ const getMyReviews = async (customerId: string) => {
 
 
 
-const updateReview = async (
-  customerId: string,
-  reviewId: string,
-  payload: any
-) => {
-  if (payload.rating && (payload.rating < 1 || payload.rating > 5)) {
-    throw new Error("Rating must be between 1 and 5");
-  }
-
-  const existingReview = await prisma.review.findUnique({
-    where: {
-      id: reviewId,
-    },
-  });
-
-  if (!existingReview) {
-    throw new Error("Review not found");
-  }
-
-  if (existingReview.customerId !== customerId) {
-    throw new Error("You are not allowed to update this review");
-  }
-
-  const result = await prisma.review.update({
-    where: {
-      id: reviewId,
-    },
-    data: {
-      comment:payload.comment ?? existingReview.comment,
-      rating:payload.rating ?? existingReview.rating
-    },
-  });
-  
-  return result;
-};
-
 const deleteReview = async (customerId: string, reviewId: string,role:string) => {
   const review = await prisma.review.findUnique({
     where: {
@@ -137,10 +101,35 @@ const deleteReview = async (customerId: string, reviewId: string,role:string) =>
   return result;
 };
 
+
+const getReviewsByMealId = async (mealId: string) => {
+  const meal = await prisma.meal.findUnique({
+    where: { id: mealId },
+  });
+
+  if (!meal) {
+    throw new Error("Meal not found");
+  }
+
+  const reviews = await prisma.review.findMany({
+    where: { mealId },
+    include: {
+      customer: {
+        select: { name: true },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return reviews;
+};
+
 export const reviewService = {
   createReview,
   getAllReviews,
   getMyReviews,
-  updateReview,
   deleteReview,
+  getReviewsByMealId
 };

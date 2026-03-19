@@ -80,31 +80,6 @@ const getMyReviews = async (req: Request, res: Response)=>{
 
 
 
-const updateReview = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user?.id as string; 
-    const reviewId = req.params.id as string;
-    const payload = req.body ;
-
-    const result = await reviewService.updateReview(
-      userId,
-      reviewId,
-      payload
-    );
-
-    res.status(200).json({
-      success: true,
-      message: "Review updated successfully",
-      data: result,
-    });
-  } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
 
 const deleteReview = async (req: Request, res: Response) => {
   try {
@@ -126,10 +101,36 @@ const deleteReview = async (req: Request, res: Response) => {
   }
 };
 
+
+const getReviewsByMealId = async (req: Request, res: Response) => {
+  try {
+    const  mealId  = req.params.id as string;
+
+    if (!mealId) {
+      return res.status(400).json({
+        success: false,
+        message: "mealId is required",
+      });
+    }
+
+    const reviews = await reviewService.getReviewsByMealId(mealId);
+
+    res.status(200).json({
+      success: true,
+      data: reviews,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
+  }
+};
+
 export const reviewController = {
   createReview,
   getAllReviews,
   getMyReviews,
-  updateReview,
-  deleteReview
+  deleteReview,
+  getReviewsByMealId
 };
