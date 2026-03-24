@@ -18,6 +18,12 @@ const createCategory=async(payload:Category)=>{
 
 }
 
+const getAllCategories = async () => {
+    const result = await prisma.category.findMany();
+  
+    return result;
+  };
+
 const deleteCategory = async (categoryId:string) => {
     const category = await prisma.category.findUnique({
       where: { 
@@ -25,7 +31,7 @@ const deleteCategory = async (categoryId:string) => {
        },
     });
   
-    if (!categoryId) {
+    if (!category) {
       throw new Error("Category not found");
     }
   
@@ -41,5 +47,6 @@ const deleteCategory = async (categoryId:string) => {
 
 export const categoryService = {
     createCategory,
+    getAllCategories,
     deleteCategory
 }

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { categoryService } from "./categories.service";
 
 
-// Create Category
+
  const createCategory = async (req: Request, res: Response) => {
   try {
     
@@ -18,11 +18,23 @@ import { categoryService } from "./categories.service";
   }
 };
 
+const getAllCategory = async (req: Request, res: Response) => {
+  try {
+   const result = await categoryService.getAllCategories()
+    res.json({ 
+      message: "Category retrieved successfully",
+      data:result 
+    });
+  } catch (err) {
+    res.status(400).json({ error: "Delete failed", details: err });
+  }
+};
 
 
-// Delete Category
+
+
  const deleteCategory = async (req: Request, res: Response) => {
-  const categoryId = req?.params.id as string;
+  const categoryId = req.params.id as string;
   try {
    const result = await categoryService.deleteCategory(categoryId )
     res.json({ message: "Category deleted successfully" });
@@ -34,5 +46,6 @@ import { categoryService } from "./categories.service";
 
 export const categoryController = {
     createCategory,
-    deleteCategory
+    deleteCategory,
+    getAllCategory
 }

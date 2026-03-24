@@ -35,6 +35,7 @@ model ProviderProfile {
   id             String   @id @default(uuid())
   userId         String   @unique
   restaurantName String
+  image          String?
   address        String?
   phone          String?  @unique
   description    String?

@@ -23,10 +23,11 @@ const createProviderProfile = async (userId: string, payload: any) => {
     const result = await prisma.providerProfile.create({
       data: {
         userId,
+        image: payload?.image,
         restaurantName: payload.restaurantName,
-        description: payload.description,
-        address: payload.address,
-        phone: payload.phone,
+        description: payload?.description,
+        address: payload?.address,
+        phone: payload?.phone,
      
       },
     });
