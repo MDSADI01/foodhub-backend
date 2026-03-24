@@ -103,8 +103,35 @@ const getOrderById = async (customerId: string, orderId: string) => {
   return order;
 };
 
+
+
+const getAllOrders = async () => {
+const result =  prisma.order.findMany({
+    include: {
+      orderItems: {
+        include: {
+          meal: true
+        }
+      },
+      customer:{
+        select:{
+          name: true
+        }
+      }
+    },
+    orderBy: {
+      createdAt: "desc"
+    }
+  });
+
+  return result;
+};
+
+
+
 export const orderService = {
   createOrder,
   getCustomerOrders,
-  getOrderById
+  getOrderById,
+  getAllOrders
 };

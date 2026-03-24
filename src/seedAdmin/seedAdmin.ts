@@ -32,6 +32,7 @@ async function seedAdmin() {
         role: adminData.role,
       },
     });
+    return signUpAdmin;
 
     
   } catch (err) {

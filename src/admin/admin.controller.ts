@@ -13,13 +13,13 @@ const getAllUsers = async (req: Request, res: Response) => {
   const updateUserStatus = async (req: Request, res: Response) => {
     try {
       const userId = req.params?.id as string;
-      const { emailVerified } = req.body;
+      const { isActive } = req.body;
   
-      if (typeof emailVerified !== "boolean") {
+      if (typeof isActive !== "boolean") {
         return res.status(400).json({ success: false, message: "isActive must be boolean" });
       }
   
-      const user = await adminService.updateUserStatus(userId, emailVerified);
+      const user = await adminService.updateUserStatus(userId, isActive);
       res.status(200).json({ success: true, data: user });
     } catch (err: any) {
       res.status(400).json({ success: false, message: err.message });

@@ -2,14 +2,20 @@ import { prisma } from "../../lib/prisma";
 
 const getAllUsers = async ()=>{
 
- const result = await prisma.user.findMany();
+ const result = await prisma.user.findMany({
+    where:{
+        role:{
+            not:"ADMIN"
+        }
+    }
+ });
 
  return result;
 
 }
 
 
-const updateUserStatus = async (userId: string,emailVerified: boolean)=>{
+const updateUserStatus = async (userId: string,isActive: boolean)=>{
 
     if(!userId){
         throw new Error("User ID is required")
@@ -20,7 +26,7 @@ const updateUserStatus = async (userId: string,emailVerified: boolean)=>{
             id: userId
         },
         data:{
-            emailVerified
+            isActive
         }
     })
     return result;
