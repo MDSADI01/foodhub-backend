@@ -28,6 +28,28 @@ const createProviderProfile = async (req: Request, res: Response) => {
   }
 };
 
+
+
+const getProviderProfile = async (req:Request, res:Response) => {
+  try {
+    const userId = req.user?.id as string;
+
+    const result = await providerService.getProviderProfile(userId);
+
+    res.status(200).json({
+      success: true,
+      message: "Provider dashboard data retrieved successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
 const createMeal = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id as string;
@@ -104,5 +126,6 @@ export const providerController = {
   createMeal,
   createProviderProfile,
   updateMeal,
-  deleteMeal
+  deleteMeal,
+  getProviderProfile
 };

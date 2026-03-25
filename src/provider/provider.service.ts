@@ -35,6 +35,34 @@ const createProviderProfile = async (userId: string, payload: any) => {
     return result;
   };
   
+
+
+
+  const getProviderProfile = async (userId: string) => {
+    const providerProfile = await prisma.providerProfile.findUnique({
+      where: { userId },
+      include: {
+        meals: {
+          select:{
+           name:true,
+
+          },
+          include: {
+            category: true,
+          },
+          orderBy: {
+            createdAt: "desc", 
+          },
+        },
+      },
+    });
+  
+    if (!providerProfile) {
+      throw new Error("Provider profile not found");
+    }
+  
+    return providerProfile;
+  };
   
 
 const createMeal = async (userId:string, payload: any)=>{
@@ -161,5 +189,5 @@ const deleteMeal = async (userId: string, mealId: string) => {
 
 
 export const providerService = {
-    createMeal,createProviderProfile,updateMeal,deleteMeal
+    createMeal,createProviderProfile,updateMeal,deleteMeal,getProviderProfile
 }
