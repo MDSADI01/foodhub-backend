@@ -77,9 +77,23 @@ const createMeal = async (req: Request, res: Response) => {
 };
 
 
+export const getMealsByProvider = async (req: Request, res: Response) => {
+  try {
+    const providerId = req.user?.id as string;
+
+    const meals = await providerService.getMealsByProvider(providerId);
+
+    return res.status(200).json({ success: true, data: meals });
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: error.message || "Failed to fetch meals" });
+  }
+};
+
+
 const updateMeal = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id as string; // from auth middleware
+    const userId = req.user?.id as string; 
     const mealId = req.params.id as string;
     const payload = req.body ;
 
@@ -127,5 +141,6 @@ export const providerController = {
   createProviderProfile,
   updateMeal,
   deleteMeal,
-  getProviderProfile
+  getProviderProfile,
+  getMealsByProvider
 };
