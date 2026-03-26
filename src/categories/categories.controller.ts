@@ -12,7 +12,7 @@ import { categoryService } from "./categories.service";
         details: result  
      })
 
-     console.log(result)
+    
   } catch (err) {
     res.status(400).json({ error: "Category creation failed", details: err });
   }

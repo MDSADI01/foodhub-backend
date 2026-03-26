@@ -1,17 +1,18 @@
-import { authorization } from './../middleware/authorization';
+import { authorization } from "./../middleware/authorization";
 import { Router } from "express";
 import { reviewController } from "./review.controller";
-import { Role } from '../../generated/prisma/enums';
+import { Role } from "../generated/enums";
 
 const router = Router();
 
-
-router.post("/",authorization(Role.CUSTOMER),reviewController.createReview)
-router.get("/",reviewController.getAllReviews)
-router.get("/own",authorization(Role.CUSTOMER),reviewController.getMyReviews)
-router.get("/meals/:id",authorization(),reviewController.getReviewsByMealId)
-router.delete("/:id",authorization(Role.CUSTOMER,Role.ADMIN),reviewController.deleteReview)
-
-
+router.post("/", authorization(Role.CUSTOMER), reviewController.createReview);
+router.get("/", reviewController.getAllReviews);
+router.get("/own", authorization(Role.CUSTOMER), reviewController.getMyReviews);
+router.get("/meals/:id", authorization(), reviewController.getReviewsByMealId);
+router.delete(
+  "/:id",
+  authorization(Role.CUSTOMER, Role.ADMIN),
+  reviewController.deleteReview
+);
 
 export const reviewRouter = router;

@@ -1,4 +1,4 @@
-import { Role } from "../../generated/prisma/enums";
+import { Role } from "../generated/enums";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
 import bcrypt from "bcrypt";
@@ -22,8 +22,6 @@ async function seedAdmin() {
       throw new Error("User already exists");
     }
 
-    
-
     const signUpAdmin = await auth.api.signUpEmail({
       body: {
         name: adminData.name,
@@ -33,8 +31,6 @@ async function seedAdmin() {
       },
     });
     return signUpAdmin;
-
-    
   } catch (err) {
     return { error: "Admin creation failed", details: err };
   }

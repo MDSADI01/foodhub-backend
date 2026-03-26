@@ -1,4 +1,4 @@
-import { Role } from "../../generated/prisma/enums";
+import { Role } from "../generated/enums";
 import { prisma } from "../../lib/prisma";
 
 const createReview = async (customerId: string, payload: any) => {
@@ -27,7 +27,7 @@ const createReview = async (customerId: string, payload: any) => {
     },
   });
 
-  console.log(result);
+  
   return result;
 };
 
@@ -51,7 +51,6 @@ const getAllReviews = async () => {
 };
 
 const getMyReviews = async (customerId: string) => {
-
   const result = await prisma.user.findUnique({
     where: {
       id: customerId,
@@ -75,9 +74,11 @@ const getMyReviews = async (customerId: string) => {
   return result?.reviews;
 };
 
-
-
-const deleteReview = async (customerId: string, reviewId: string,role:string) => {
+const deleteReview = async (
+  customerId: string,
+  reviewId: string,
+  role: string
+) => {
   const review = await prisma.review.findUnique({
     where: {
       id: reviewId,
@@ -100,7 +101,6 @@ const deleteReview = async (customerId: string, reviewId: string,role:string) =>
 
   return result;
 };
-
 
 const getReviewsByMealId = async (mealId: string) => {
   const meal = await prisma.meal.findUnique({
@@ -131,5 +131,5 @@ export const reviewService = {
   getAllReviews,
   getMyReviews,
   deleteReview,
-  getReviewsByMealId
+  getReviewsByMealId,
 };

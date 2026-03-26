@@ -1,7 +1,7 @@
 import { authorization } from "./../middleware/authorization";
 import { Router } from "express";
 import { providerController } from "./provider.controller";
-import { Role } from "../../generated/prisma/enums";
+import { Role } from "../generated/enums";
 
 const router = Router();
 
@@ -37,9 +37,11 @@ router.delete(
   providerController.deleteMeal
 );
 
-router.get("/orders", 
+router.get(
+  "/orders",
   authorization(Role.PROVIDER),
-  providerController.getProviderOrders);
+  providerController.getProviderOrders
+);
 
 router.patch(
   "/orders/:id",

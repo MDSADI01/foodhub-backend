@@ -7,6 +7,7 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql", // or "mysql", "postgresql", ...etc
   }),
+  baseURL: process.env.APP_URL,
   trustedOrigins: [process.env.APP_URL || "http://localhost:3000"],
   emailAndPassword: {
     enabled: true,
@@ -38,8 +39,31 @@ export const auth = betterAuth({
       image: {
         type: "string",
         required: false,
-        input: false, 
+        input: false,
       },
+    },
+  },
+
+  advanced: {
+    cookies: {
+      session_token: {
+        name: "session_token",
+        attributes: {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          partitioned: true,
+        },
+      },
+    },
+  },
+  state: {
+    name: "session_token",
+    attributes: {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      partitioned: true,
     },
   },
 });

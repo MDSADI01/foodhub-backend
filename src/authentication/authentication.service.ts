@@ -1,4 +1,4 @@
-// import { Role } from "../../generated/prisma/enums";
+// import { Role } from "../generated/enums";
 // import { auth } from "../../lib/auth";
 // import { prisma } from "../../lib/prisma";
 
@@ -19,7 +19,6 @@
 //     throw new Error("User already exists");
 //   }
 
-
 //   const result = await auth.api.signUpEmail({
 //     body: {
 //       name: payload.name,
@@ -33,10 +32,8 @@
 //     throw new Error("User SignUp failed");
 //   }
 
-
 //   return result
 // };
-
 
 // const loginUser = async (email: string, password: string)=>{
 
@@ -48,16 +45,9 @@
 //   returnHeaders:true
 // })
 
-
-
 // if(!result?.response?.user){
 //   throw new Error("User SignIn Failed");
 // }
-
-
-
-
-
 
 // return result;
 
@@ -68,17 +58,15 @@
 //  if(!userId){
 //   throw new Error("Their is no active User")
 //  }
-  
+
 //   const result = await prisma.user.findFirst({
 //     where:{
 //       id:userId
 //     }
 //   })
-  
-  
-  
+
 //   return result;
-  
+
 //   }
 
 // export const userAuthService = {

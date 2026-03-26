@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { auth } from "../../lib/auth";
-import { Role } from "../../generated/prisma/enums";
-
+import { Role } from "../generated/enums";
 
 declare global {
   namespace Express {
@@ -18,14 +17,11 @@ declare global {
 
 export const authorization = (...roles: Role[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-
-   
     const session = await auth.api.getSession({
-      headers:req.headers as any
+      headers: req.headers as any,
     });
 
-
-    console.log(session)
+ 
 
     if (!session) {
       return res.status(401).json({
@@ -35,20 +31,18 @@ export const authorization = (...roles: Role[]) => {
     }
 
     req.user = {
-        id:session.user.id,
-        email:session.user.email,
-        name:session.user.name,
-        role:session.user.role
-
+      id: session.user.id,
+      email: session.user.email,
+      name: session.user.name,
+      role: session.user.role,
     };
-     
-    if(roles.length && !roles.includes(req.user.role as Role)){
-        return res.status(401).json({
-            success: false,
-            message: "Forbidden!You are not authorized to access this page",
-          });
+
+    if (roles.length && !roles.includes(req.user.role as Role)) {
+      return res.status(401).json({
+        success: false,
+        message: "Forbidden!You are not authorized to access this page",
+      });
     }
     next();
-
   };
 };

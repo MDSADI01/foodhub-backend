@@ -27,7 +27,7 @@ app.use(
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Hello Sadi");
+  res.send("Hello FoodyVerse");
 });
 
 // app.use("/api/auth", userAuthRoutes);
