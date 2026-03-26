@@ -137,6 +137,51 @@ const deleteMeal = async (req: Request, res: Response) => {
 };
 
 
+const getProviderOrders = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id as string; 
+    const result = await providerService.getProviderOrders(userId);
+
+    res.status(200).json({
+      success: true,
+      message: "Orders retrieved successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const updateOrderItemStatus = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id as string;
+    const  orderItemId  = req.params.id as string;
+    const { status } = req.body;
+
+    const result = await providerService.updateOrderItemStatus(
+      userId,
+      orderItemId,
+      status
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Order item status updated",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+
 
 export const providerController = {
   createMeal,
@@ -144,5 +189,7 @@ export const providerController = {
   updateMeal,
   deleteMeal,
   getProviderProfile,
-  getMealsByProvider
+  getMealsByProvider,
+  getProviderOrders,
+  updateOrderItemStatus
 };

@@ -96,7 +96,7 @@ model OrderItem {
   quantity Int    @default(1)
   status          OrderStatus @default(PLACED)
   price    Float
-  meal     Meal   @relation(fields: [mealId], references: [id])
+  meal     Meal   @relation(fields: [mealId], references: [id], onDelete: Cascade)
   order    Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@index([orderId])

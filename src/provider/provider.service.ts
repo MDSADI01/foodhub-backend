@@ -1,3 +1,4 @@
+import { OrderStatus } from "../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma"
 
 
@@ -211,6 +212,104 @@ const deleteMeal = async (userId: string, mealId: string) => {
 };
 
 
+const getProviderOrders = async (userId: string) => {
+  const providerProfile = await prisma.providerProfile.findUnique({
+    where: { userId },
+  });
+
+  if (!providerProfile) {
+    throw new Error("Provider profile not found");
+  }
+
+  return prisma.order.findMany({
+    where: {
+      orderItems: {
+        some: {
+          meal: {
+            providerId: providerProfile.id,
+          },
+        },
+      },
+    },
+    include: {
+      customer: {
+        select: { name: true },
+      },
+      orderItems: {
+        where: {
+          meal: {
+            providerId: providerProfile.id,
+          },
+        },
+        include: {
+          meal: {
+            select: { name: true, price: true },
+          },
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+};
+
+const updateMainOrderStatus = async (orderId: string) => {
+  const items = await prisma.orderItem.findMany({
+    where: { orderId },
+  });
+
+  const allDelivered = items.every(i => i.status === "DELIVERED");
+  const anyPreparing = items.some(i => i.status === "PREPARING");
+  const anyCancelled = items.some(i => i.status === "CANCELLED");
+
+  let status: OrderStatus = "PLACED";
+
+  if (allDelivered) status = "DELIVERED";
+  else if (anyPreparing) status = "PREPARING";
+  else if (anyCancelled) status = "CANCELLED";
+
+  await prisma.order.update({
+    where: { id: orderId },
+    data: { status },
+  });
+};
+
+const updateOrderItemStatus = async (
+  userId: string,
+  orderItemId: string,
+  status: OrderStatus
+) => {
+  const providerProfile = await prisma.providerProfile.findUnique({
+    where: { userId },
+  });
+
+  if (!providerProfile) {
+    throw new Error("Provider profile not found");
+  }
+
+  const orderItem = await prisma.orderItem.findUnique({
+    where: { id: orderItemId },
+    include: { meal: true },
+  });
+
+  if (!orderItem) {
+    throw new Error("Order item not found");
+  }
+
+  if (orderItem.meal.providerId !== providerProfile.id) {
+    throw new Error("Unauthorized");
+  }
+
+  const updated = await prisma.orderItem.update({
+    where: { id: orderItemId },
+    data: { status },
+  });
+
+  await updateMainOrderStatus(orderItem.orderId);
+
+  return updated;
+};
+
+
 
 
 
@@ -220,5 +319,5 @@ const deleteMeal = async (userId: string, mealId: string) => {
 
 
 export const providerService = {
-    createMeal,createProviderProfile,updateMeal,deleteMeal,getProviderProfile,getMealsByProvider
+    createMeal,createProviderProfile,updateMeal,deleteMeal,getProviderProfile,getMealsByProvider,getProviderOrders,updateOrderItemStatus
 }

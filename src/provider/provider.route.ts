@@ -37,4 +37,14 @@ router.delete(
   providerController.deleteMeal
 );
 
+router.get("/orders", 
+  authorization(Role.PROVIDER),
+  providerController.getProviderOrders);
+
+router.patch(
+  "/orders/:id",
+  authorization(Role.PROVIDER),
+  providerController.updateOrderItemStatus
+);
+
 export const providerRoutes = router;
