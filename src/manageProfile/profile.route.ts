@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.patch(
   "/",
-  authorization(Role.CUSTOMER),
+  authorization(Role.CUSTOMER,Role.PROVIDER),
   profileController.updateProfile
 );
 
