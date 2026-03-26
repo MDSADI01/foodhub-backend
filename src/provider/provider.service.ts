@@ -112,7 +112,7 @@ if (!category) {
 const getMealsByProvider = async (providerId: string) => {
   
   const providerProfile = await prisma.providerProfile.findUnique({
-    where: { id: providerId },
+    where: { userId: providerId },
   });
 
   if (!providerProfile) {
@@ -209,6 +209,10 @@ const deleteMeal = async (userId: string, mealId: string) => {
 
   return result;
 };
+
+
+
+
 
 
 
