@@ -1,32 +1,26 @@
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../lib/prisma";
 
-const getAllProviders = async ()=>{
+const getAllProviders = async () => {
+  const result = await prisma.providerProfile.findMany();
 
- const result = await prisma.providerProfile.findMany();
+  return result;
+};
 
- return result;
+const getProviderWithMenu = async (providerId: string) => {
+  if (!providerId) {
+    throw new Error("Provider ID is required");
+  }
 
-}
+  const result = await prisma.providerProfile.findFirst({
+    where: {
+      id: providerId,
+    },
+  });
 
+  return result;
+};
 
-const getProviderWithMenu = async (providerId: string)=>{
-
-    if(!providerId){
-        throw new Error("Provider ID is required")
-    }
-
-    const result = await prisma.providerProfile.findFirst({
-        where:{
-            id:providerId
-        }
-    });
-   
-    return result;
-   
-   }
-
-
-   export const getProviderService = {
-    getAllProviders,
-    getProviderWithMenu
-   }
+export const getProviderService = {
+  getAllProviders,
+  getProviderWithMenu,
+};

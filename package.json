@@ -4,10 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx tsx watch src/server/server.ts",
-    "build": "tsup",
-    "start": "node dist/server.js"
+    "dev": "tsx watch src/server/server.ts",
+    "build": "prisma generate && tsc && node scripts/fix-imports.js",
+    "build:tsup": "tsup",
+    "start": "node dist/server.js",
+    "lint": "eslint ./src/**/*",
+    "migrate": "prisma migrate dev",
+    "generate": "prisma generate",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +30,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "@t3-oss/env-nextjs": "^0.13.10",

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { auth } from "../../lib/auth";
+
 import { Role } from "../generated/enums";
+import { auth } from "../lib/auth";
 
 declare global {
   namespace Express {
@@ -20,8 +21,6 @@ export const authorization = (...roles: Role[]) => {
     const session = await auth.api.getSession({
       headers: req.headers as any,
     });
-
- 
 
     if (!session) {
       return res.status(401).json({

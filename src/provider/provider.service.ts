@@ -1,5 +1,5 @@
 import { OrderStatus } from "../generated/enums";
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../lib/prisma";
 
 const createProviderProfile = async (userId: string, payload: any) => {
   const existingProfile = await prisma.providerProfile.findUnique({

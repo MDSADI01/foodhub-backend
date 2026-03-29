@@ -1,4 +1,4 @@
-import { auth } from "./../../lib/auth";
+import { auth } from "../lib/auth";
 import express, { Application } from "express";
 import { toNodeHandler } from "better-auth/node";
 import cors from "cors";
@@ -17,12 +17,36 @@ import { profileRoute } from "../manageProfile/profile.route";
 // import { categoryRoutes } from '../category/category.route';
 
 const app: Application = express();
+const allowedOrigins = [
+  process.env.APP_URL || "http://localhost:3000",
+  process.env.PROD_APP_URL, // Production frontend URL
+].filter(Boolean); // Remove undefined values
+
 app.use(
   cors({
-    origin: process.env.APP_URL || "http://localhost:3000",
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, Postman, etc.)
+      if (!origin) return callback(null, true);
+
+      // Check if origin is in allowedOrigins or matches Vercel preview pattern
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        /^https:\/\/next-blog-client.*\.vercel\.app$/.test(origin) ||
+        /^https:\/\/.*\.vercel\.app$/.test(origin); // Any Vercel deployment
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
     credentials: true,
-  })
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+    exposedHeaders: ["Set-Cookie"],
+  }),
 );
+
 
 app.use(express.json());
 
@@ -31,7 +55,7 @@ app.get("/", (req, res) => {
 });
 
 // app.use("/api/auth", userAuthRoutes);
-app.all('/api/auth/*splat', toNodeHandler(auth));
+app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use("/api/provider", providerRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/category", categoryRoutes);
@@ -39,6 +63,6 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/meals", mealRoutes);
 app.use("/api/providers", getProviderRoutes);
 app.use("/api/reviews", reviewRouter);
-app.use("/api/profile",profileRoute);
+app.use("/api/profile", profileRoute);
 
 export default app;

@@ -1,5 +1,6 @@
-import { Category } from "../../src/generated/client/client";
-import { prisma } from "../../lib/prisma";
+
+import { Category } from "../generated/client";
+import { prisma } from "../lib/prisma";
 
 const createCategory = async (payload: Category) => {
   const result = await prisma.category.create({

@@ -1,25 +1,21 @@
 import { Request, Response } from "express";
 import { orderService } from "./order.service";
-import { prisma } from "../../lib/prisma";
-
+import { prisma } from "../lib/prisma";
 
 const createOrder = async (req: Request, res: Response) => {
   try {
-    const customerId = req.user?.id as string; 
-    const result = await orderService.createOrder(
-      customerId,
-      req.body
-    );
+    const customerId = req.user?.id as string;
+    const result = await orderService.createOrder(customerId, req.body);
 
     res.status(201).json({
       success: true,
       message: "Order placed successfully",
-      data: result
+      data: result,
     });
   } catch (error: any) {
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -32,12 +28,12 @@ const getCustomerOrders = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      data: result
+      data: result,
     });
   } catch (error: any) {
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -51,43 +47,35 @@ const getOrderById = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      data: result
+      data: result,
     });
   } catch (error: any) {
     res.status(404).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
 
-
 const getAllOrders = async (req: Request, res: Response) => {
   try {
-    
-
     const result = await orderService.getAllOrders();
 
     res.status(200).json({
       success: true,
-      data: result
+      data: result,
     });
   } catch (error: any) {
     res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
-
-
-
-
-
 
 export const orderController = {
   createOrder,
   getCustomerOrders,
   getOrderById,
-  getAllOrders
+  getAllOrders,
 };

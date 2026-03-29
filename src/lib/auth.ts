@@ -2,6 +2,7 @@ import { prisma } from "./prisma";
 import { Auth, betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 // If your Prisma file is located elsewhere, you can change the path
+import { oAuthProxy } from "better-auth/plugins";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -43,19 +44,31 @@ export const auth = betterAuth({
       },
     },
   },
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // 5 minutes
+    },
+  },
 
   advanced: {
-    cookies: {
-      session_token: {
-        name: "session_token",
-        attributes: {
-          httpOnly: true,
-          secure: true,
-          sameSite: "none",
-          partitioned: true,
-        },
-      },
+    // cookies: {
+    //   session_token: {
+    //     name: "session_token",
+    //     attributes: {
+    //       httpOnly: true,
+    //       secure: true,
+    //       sameSite: "none",
+    //       partitioned: true,
+    //     },
+    //   },
+    // },
+    cookiePrefix: "better-auth",
+    useSecureCookies: process.env.NODE_ENV === "production",
+    crossSubDomainCookies: {
+      enabled: false,
     },
+    disableCSRFCheck: true, // Allow requests without Origin header (Postman, mobile apps, etc.)
   },
   state: {
     name: "session_token",
@@ -66,4 +79,5 @@ export const auth = betterAuth({
       partitioned: true,
     },
   },
+  plugins: [oAuthProxy()],
 });

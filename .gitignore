@@ -6,4 +6,6 @@ build
 .DS_Store
 /generated/prisma
 .vercel
+dist
 
+.env*.local

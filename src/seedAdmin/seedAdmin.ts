@@ -1,6 +1,6 @@
 import { Role } from "../generated/enums";
-import { auth } from "../../lib/auth";
-import { prisma } from "../../lib/prisma";
+import { auth } from "../lib/auth";
+import { prisma } from "../lib/prisma";
 import bcrypt from "bcrypt";
 
 async function seedAdmin() {

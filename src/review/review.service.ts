@@ -1,5 +1,5 @@
 import { Role } from "../generated/enums";
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../lib/prisma";
 
 const createReview = async (customerId: string, payload: any) => {
   const { mealId, rating, comment } = payload;
@@ -27,7 +27,6 @@ const createReview = async (customerId: string, payload: any) => {
     },
   });
 
-  
   return result;
 };
 
