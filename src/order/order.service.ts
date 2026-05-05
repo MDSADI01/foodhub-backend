@@ -102,8 +102,8 @@ const getOrderById = async (customerId: string, orderId: string) => {
   return order;
 };
 
-const getAllOrders = async () => {
-  const result = prisma.order.findMany({
+const getAllOrders = async (sortBy?: string) => {
+  const result = await prisma.order.findMany({
     include: {
       orderItems: {
         include: {
@@ -120,6 +120,36 @@ const getAllOrders = async () => {
       createdAt: "desc",
     },
   });
+
+  if (sortBy === "popularity") {
+    // Calculate total quantity for each meal across all orders
+    const mealPopularity: Record<string, number> = {};
+    result.forEach((order) => {
+      order.orderItems.forEach((item) => {
+        mealPopularity[item.mealId] =
+          (mealPopularity[item.mealId] || 0) + item.quantity;
+      });
+    });
+
+    // Sort orders by the maximum popularity of any meal they contain
+    return result.sort((a, b) => {
+      const aMaxPopularity = Math.max(
+        ...a.orderItems.map((item) => mealPopularity[item.mealId] || 0),
+        0,
+      );
+      const bMaxPopularity = Math.max(
+        ...b.orderItems.map((item) => mealPopularity[item.mealId] || 0),
+        0,
+      );
+
+      if (bMaxPopularity !== aMaxPopularity) {
+        return bMaxPopularity - aMaxPopularity;
+      }
+
+      // Secondary sort by order creation time
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+  }
 
   return result;
 };

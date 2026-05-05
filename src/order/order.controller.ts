@@ -59,7 +59,8 @@ const getOrderById = async (req: Request, res: Response) => {
 
 const getAllOrders = async (req: Request, res: Response) => {
   try {
-    const result = await orderService.getAllOrders();
+    const { sortBy } = req.query;
+    const result = await orderService.getAllOrders(sortBy as string);
 
     res.status(200).json({
       success: true,

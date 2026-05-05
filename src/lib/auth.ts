@@ -9,6 +9,13 @@ export const auth = betterAuth({
     provider: "postgresql", // or "mysql", "postgresql", ...etc
   }),
   baseURL: process.env.APP_URL,
+  socialProviders: {
+    google: { 
+      clientId: process.env.GOOGLE_CLIENT_ID as string, 
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      prompt:"select_account" ,
+    },
+  },
   trustedOrigins: [process.env.APP_URL || "http://localhost:3000"],
   emailAndPassword: {
     enabled: true,
@@ -52,17 +59,17 @@ export const auth = betterAuth({
   },
 
   advanced: {
-    // cookies: {
-    //   session_token: {
-    //     name: "session_token",
-    //     attributes: {
-    //       httpOnly: true,
-    //       secure: true,
-    //       sameSite: "none",
-    //       partitioned: true,
-    //     },
-    //   },
-    // },
+    cookies: {
+      session_token: {
+        name: "session_token",
+        attributes: {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          partitioned: true,
+        },
+      },
+    },
     cookiePrefix: "better-auth",
     useSecureCookies: process.env.NODE_ENV === "production",
     crossSubDomainCookies: {
